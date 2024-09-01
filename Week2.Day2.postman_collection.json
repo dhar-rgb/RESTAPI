@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "7219bf23-ff67-487a-a917-7c8959e96ed4",
+		"name": "Week2.Day2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33030180"
+	},
+	"item": [
+		{
+			"name": "Chain Request using postman",
+			"item": [
+				{
+					"name": "get_incident_using_query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200); ",
+									"});",
+									"",
+									"pm.test(\"Validate the number of incidents is 7\", function () {",
+									"    pm.expect(pm.response.json().result.length).to.eql(7);",
+									"});",
+									"",
+									"pm.test(\"Validate that all incidents are in 'Network' or 'Database' category\", function () {",
+									"    var responseJSON = pm.response.json();",
+									"    pm.expect(responseJSON).to.be.an('object');",
+									"    pm.expect(responseJSON.result).to.be.an('array');",
+									"    ",
+									"    responseJSON.result.forEach((incident) => {",
+									"        pm.expect(incident.category.toLowerCase()).to.satisfy((category) => {",
+									"            return category === 'network' || category === 'database';",
+									"        });",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{Username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}{{instance}}.service-now.com/api/now/table/:tableName?sysparm_query=category=database^NQcategory=network",
+							"host": [
+								"{{protocol}}{{instance}}",
+								"service-now",
+								"com"
+							],
+							"path": [
+								"api",
+								"now",
+								"table",
+								":tableName"
+							],
+							"query": [
+								{
+									"key": "sysparm_query",
+									"value": "category=database^NQcategory=network"
+								}
+							],
+							"variable": [
+								{
+									"key": "tableName",
+									"value": "incident"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter the incident",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									" "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{Username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}{{instance}}.service-now.com/api/now/table/incident/{{cr_sys_id}}",
+							"host": [
+								"{{protocol}}{{instance}}",
+								"service-now",
+								"com"
+							],
+							"path": [
+								"api",
+								"now",
+								"table",
+								"incident",
+								"{{cr_sys_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change the description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Update by Dharma\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"short_description\": \"My update for the day\",\r\n    \"description\": \"Update by Dharma\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}{{instance}}.service-now.com/api/now/table/incident/{{cr_sys_id}}",
+							"host": [
+								"{{protocol}}{{instance}}",
+								"service-now",
+								"com"
+							],
+							"path": [
+								"api",
+								"now",
+								"table",
+								"incident",
+								"{{cr_sys_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a single incident",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"My laptop is having network issue\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{Username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"short_description\": \"My laptop is having network issue\",\r\n    \"description\": \"DELL PC\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}{{instance}}.service-now.com/api/now/table/incident",
+							"host": [
+								"{{protocol}}{{instance}}",
+								"service-now",
+								"com"
+							],
+							"path": [
+								"api",
+								"now",
+								"table",
+								"incident"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "protocol",
+			"value": "https",
+			"type": "string"
+		},
+		{
+			"key": "instance",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "cr_sys_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
