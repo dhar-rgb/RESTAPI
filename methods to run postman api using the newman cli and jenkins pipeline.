@@ -1,0 +1,24 @@
+Steps for the newmann/postman api 
+a. add all the variables in the collection variables section.
+b. create a separate json file containing auth username and pwd.
+c. create a collection and create an incident using http post request and follow with other request for getting, update and delete request as per the interest. 
+d. check each request with necessary validations and status checks. 
+e. upon successful validations and requests. Download the collection json file along with the global and environment variables as required. 
+f. open cmd in the downloaded folder that contain the postman collection json files. 
+g. run the command "newman run <$filename.postman_collection.json> -g workspace.postman_globals.json -d  <$YourCredentialFile.json> -r htmlextra"
+h. upon successful run, you should see a new folder "newman" -> inside you should see the html reports. 
+
+
+Steps for the Jenkins pipeline:
+a. make sure jenkins is up and running.
+b. create a freestyle pipeline 
+c. configure the pipeline -> build steps-> execute batch command for windows
+  -- give the following commands
+    --cd $path_to_the_folder_whereYourCollectionJSONfiles_forPostman
+    --newman run <$filename.postman_collection.json> -g workspace.postman_globals.json -d  <$YourCredentialFile.json> -r htmlextra
+
+
+d. apply and save the configuration. 
+e. click the buildnow and check the build status using the console output in jenkins. 
+
+f. if everything works, you should see a new html report generated for jenkins-postman api call using the newman collection/jenkins pipeline. 
