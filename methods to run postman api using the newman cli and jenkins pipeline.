@@ -17,6 +17,10 @@ c. configure the pipeline -> build steps-> execute batch command for windows
     --cd $path_to_the_folder_whereYourCollectionJSONfiles_forPostman
     --newman run <$filename.postman_collection.json> -g workspace.postman_globals.json -d  <$YourCredentialFile.json> -r htmlextra
 
+d. apply and save the configuration. 
+e. click the buildnow and check the build status using the console output in jenkins. 
+
+f. if everything works, you should see a new html report generated for jenkins-postman api call using the newman collection/jenkins pipeline. 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -27,11 +31,3 @@ c. configure the pipeline -> build steps-> execute batch command for windows
 3. ran the newman cli separately for each folders and verified using htmlextra using the command below in cmd
 newman run Week2.Day2.postman_collection-2.json -g workspace.postman_globals.json -d credentials.json --folder "Change_Request-Homeassignment" -r htmlextra
 
-
-
-
-
-d. apply and save the configuration. 
-e. click the buildnow and check the build status using the console output in jenkins. 
-
-f. if everything works, you should see a new html report generated for jenkins-postman api call using the newman collection/jenkins pipeline. 
