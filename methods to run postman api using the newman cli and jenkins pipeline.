@@ -18,6 +18,19 @@ c. configure the pipeline -> build steps-> execute batch command for windows
     --newman run <$filename.postman_collection.json> -g workspace.postman_globals.json -d  <$YourCredentialFile.json> -r htmlextra
 
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// added the second folder in postman for the change request table CRUD operations as part of home assignemnt.
+
+1. performed the CRUD operations in postman as usual
+2. downloaded the collection (week2.day2-collections.postman2.json) which has both the Chain Request using postman & change request folder). 
+3. ran the newman cli separately for each folders and verified using htmlextra using the command below in cmd
+newman run Week2.Day2.postman_collection-2.json -g workspace.postman_globals.json -d credentials.json --folder "Change_Request-Homeassignment" -r htmlextra
+
+
+
+
+
 d. apply and save the configuration. 
 e. click the buildnow and check the build status using the console output in jenkins. 
 
